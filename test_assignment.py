@@ -4,6 +4,10 @@ import os
 import numpy as np
 import pandas as pd
 
+# Mock display function to replace IPython display with print
+def mock_display(*args, **kwargs):
+    print(*args, **kwargs)
+
 class TestAssignmentNotebook(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -16,6 +20,10 @@ class TestAssignmentNotebook(unittest.TestCase):
         
         cls.global_env = {}
         
+        # Mock the display function by adding it to the global environment
+        cls.global_env['display'] = mock_display
+        
+        # Execute each cell in the notebook
         for cell in nb.cells:
             if cell.cell_type == "code":
                 try:

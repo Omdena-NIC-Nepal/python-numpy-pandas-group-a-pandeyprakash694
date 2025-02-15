@@ -18,7 +18,13 @@ class TestAssignmentNotebook(unittest.TestCase):
         
         for cell in nb.cells:
             if cell.cell_type == "code":
-                exec(cell.source, cls.global_env)
+                try:
+                    exec(cell.source, cls.global_env)
+                except ModuleNotFoundError as e:
+                    if 'IPython' in str(e):
+                        print("Warning: IPython module not found, skipping display calls.")
+                    else:
+                        raise e
     
     def test_numpy_array_creation(self):
         """Test if a NumPy array is created correctly"""
